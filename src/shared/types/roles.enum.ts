@@ -21,12 +21,7 @@ export const ROLES: Role[] = [
   {
     name: 'Admin',
     code: RoleCode.ADMIN,
-    permissions: [
-      Permission.CREATE,
-      Permission.VIEW,
-      Permission.EDIT,
-      Permission.DELETE,
-    ],
+    permissions: [Permission.CREATE, Permission.VIEW, Permission.EDIT, Permission.DELETE],
   },
   { name: 'Personal', code: RoleCode.PERSONAL, permissions: [] },
   { name: 'Viewer', code: RoleCode.VIEWER, permissions: [Permission.VIEW] },

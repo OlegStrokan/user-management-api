@@ -6,8 +6,5 @@ export interface IUserRepository {
   create(user: Partial<UserEntity>): Promise<UserEntity>;
   update(id: string, user: Partial<UserEntity>): Promise<UserEntity | null>;
   delete(id: string): Promise<void>;
-  findManagedUsers(
-    managerId: string,
-    managerGroups: string[],
-  ): Promise<UserEntity[]>;
+  findManagedUsers(managerId: string, managerGroups: string[]): Promise<UserEntity[]>;
 }

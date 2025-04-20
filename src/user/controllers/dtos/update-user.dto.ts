@@ -1,9 +1,6 @@
 import { ApiProperty, PartialType } from '@nestjs/swagger';
 import { CreateUserDto } from './create-user.dto';
-import {
-  PREDEFINED_GROUPS,
-  PREDEFINED_ROLES,
-} from 'src/shared/types/roles.enum';
+import { PREDEFINED_GROUPS, PREDEFINED_ROLES } from 'src/shared/types/roles.enum';
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {
   @ApiProperty({

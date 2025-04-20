@@ -7,10 +7,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
-import {
-  PREDEFINED_ROLES,
-  PREDEFINED_GROUPS,
-} from '../../../shared/types/roles.enum';
+import { PREDEFINED_ROLES, PREDEFINED_GROUPS } from '../../../shared/types/roles.enum';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {

@@ -17,12 +17,8 @@ describe('UserRepositoryTest', () => {
   beforeAll(async () => {
     module = await createTestingModule();
 
-    userRepository = module.get<IUserRepository & IClearable>(
-      INJECTION_TOKENS.USER_REPOSITORY,
-    );
-    userMockService = module.get<IUserMockService>(
-      INJECTION_TOKENS.USER_MOCK_SERVICE,
-    );
+    userRepository = module.get<IUserRepository & IClearable>(INJECTION_TOKENS.USER_REPOSITORY);
+    userMockService = module.get<IUserMockService>(INJECTION_TOKENS.USER_MOCK_SERVICE);
   });
 
   afterEach(async () => {
@@ -148,10 +144,7 @@ describe('UserRepositoryTest', () => {
         groups: ['GROUP_3'],
       });
 
-      const managedUsers = await userRepository.findManagedUsers(
-        manager.id,
-        manager.groups,
-      );
+      const managedUsers = await userRepository.findManagedUsers(manager.id, manager.groups);
 
       expect(managedUsers.length).toBe(2);
       expect(managedUsers).toEqual(
@@ -168,10 +161,7 @@ describe('UserRepositoryTest', () => {
         groups: ['GROUP_1'],
       });
 
-      const managedUsers = await userRepository.findManagedUsers(
-        manager.id,
-        manager.groups,
-      );
+      const managedUsers = await userRepository.findManagedUsers(manager.id, manager.groups);
       expect(managedUsers).toEqual([]);
     });
   });

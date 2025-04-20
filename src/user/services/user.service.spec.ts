@@ -25,9 +25,7 @@ describe('UsersServiceTest', () => {
   beforeAll(async () => {
     module = await createTestingModule();
     userService = module.get<IUsersService>(INJECTION_TOKENS.USER_SERVICE);
-    userMockService = module.get<IUserMockService>(
-      INJECTION_TOKENS.USER_MOCK_SERVICE,
-    );
+    userMockService = module.get<IUserMockService>(INJECTION_TOKENS.USER_MOCK_SERVICE);
   });
 
   afterEach(async () => {
@@ -74,9 +72,7 @@ describe('UsersServiceTest', () => {
 
     it('should throw NotFoundException for non-existent user', async () => {
       const nonExistentId = generateUlid();
-      await expect(userService.findOne(nonExistentId)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(userService.findOne(nonExistentId)).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -108,9 +104,9 @@ describe('UsersServiceTest', () => {
 
     it('should throw NotFoundException when updating non-existent user', async () => {
       const nonExistentId = generateUlid();
-      await expect(
-        userService.update(nonExistentId, { name: 'New Name' }),
-      ).rejects.toThrow(NotFoundException);
+      await expect(userService.update(nonExistentId, { name: 'New Name' })).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 
@@ -119,16 +115,12 @@ describe('UsersServiceTest', () => {
       const [testUser] = await setupTestUsers();
       await userService.delete(testUser.id);
 
-      await expect(userService.findOne(testUser.id)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(userService.findOne(testUser.id)).rejects.toThrow(NotFoundException);
     });
 
     it('should throw NotFoundException when deleting non-existent user', async () => {
       const nonExistentId = generateUlid();
-      await expect(userService.delete(nonExistentId)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(userService.delete(nonExistentId)).rejects.toThrow(NotFoundException);
     });
   });
 
@@ -148,9 +140,7 @@ describe('UsersServiceTest', () => {
         const expectedUserIds = ['1', '2', '6'];
 
         expect(result).toHaveLength(3);
-        expect(result.map((u) => u.id)).toEqual(
-          expect.arrayContaining(expectedUserIds),
-        );
+        expect(result.map((u) => u.id)).toEqual(expect.arrayContaining(expectedUserIds));
         result.forEach((user) => {
           expect(user.groups).toContain('GROUP_1');
         });
@@ -161,9 +151,7 @@ describe('UsersServiceTest', () => {
         const expectedUserIds = ['1', '2', '3'];
 
         expect(result).toHaveLength(3);
-        expect(result.map((u) => u.id)).toEqual(
-          expect.arrayContaining(expectedUserIds),
-        );
+        expect(result.map((u) => u.id)).toEqual(expect.arrayContaining(expectedUserIds));
         result.forEach((user) => {
           expect(user.groups).toContain('GROUP_2');
         });
@@ -172,9 +160,7 @@ describe('UsersServiceTest', () => {
 
     it('should throw NotFoundException for non-existent manager', async () => {
       const nonExistentId = generateUlid();
-      await expect(userService.findManagedUsers(nonExistentId)).rejects.toThrow(
-        NotFoundException,
-      );
+      await expect(userService.findManagedUsers(nonExistentId)).rejects.toThrow(NotFoundException);
     });
   });
 });

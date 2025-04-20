@@ -1,8 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  PREDEFINED_GROUPS,
-  PREDEFINED_ROLES,
-} from 'src/shared/types/roles.enum';
+import { PREDEFINED_GROUPS, PREDEFINED_ROLES } from 'src/shared/types/roles.enum';
 
 export class UserDto {
   @ApiProperty({

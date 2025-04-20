@@ -29,10 +29,7 @@ export class UserRepository implements IUserRepository, IClearable {
     return this.repository.save(newUser);
   }
 
-  async update(
-    id: string,
-    user: Partial<UserEntity>,
-  ): Promise<UserEntity | null> {
+  async update(id: string, user: Partial<UserEntity>): Promise<UserEntity | null> {
     await this.repository.update(id, user);
     return this.findOne(id);
   }
@@ -41,10 +38,7 @@ export class UserRepository implements IUserRepository, IClearable {
     await this.repository.delete(id);
   }
 
-  async findManagedUsers(
-    managerId: string,
-    managerGroups: string[],
-  ): Promise<UserEntity[]> {
+  async findManagedUsers(managerId: string, managerGroups: string[]): Promise<UserEntity[]> {
     return this.repository
       .createQueryBuilder('user')
       .where('user.groups && :groups', { groups: managerGroups })

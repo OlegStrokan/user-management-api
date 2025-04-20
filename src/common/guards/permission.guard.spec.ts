@@ -11,8 +11,7 @@ import { PermissionsGuard } from './permission.guard';
 import { PERMISSIONS_METADATA_KEY } from '../decorators/permission.decorator';
 import { IUsersService } from 'src/user/services/interface';
 
-
-// unlike UserServiceTest or UserRepositoryTest this test doesn't use real data. 
+// unlike UserServiceTest or UserRepositoryTest this test doesn't use real data.
 // real data with database is only necessary for testing services, use cases, and business logic.
 
 describe('PermissionsGuardTest', () => {
@@ -37,12 +36,8 @@ describe('PermissionsGuardTest', () => {
   beforeAll(async () => {
     module = await createTestingModule();
 
-    userMockService = module.get<IUserMockService>(
-      INJECTION_TOKENS.USER_MOCK_SERVICE,
-    );
-    usersService = module.get<IUsersService>(
-      INJECTION_TOKENS.USER_SERVICE,
-    );
+    userMockService = module.get<IUserMockService>(INJECTION_TOKENS.USER_MOCK_SERVICE);
+    usersService = module.get<IUsersService>(INJECTION_TOKENS.USER_SERVICE);
   });
 
   afterEach(async () => {
@@ -59,18 +54,16 @@ describe('PermissionsGuardTest', () => {
       const mockReflector = { get: jest.fn().mockReturnValue(undefined) };
       const guardInstance = new PermissionsGuard(
         mockReflector as unknown as Reflector,
-        usersService
+        usersService,
       );
       const context = createMockContext('any-id');
 
-      const result = await guardInstance.canActivate(
-        context as unknown as ExecutionContext,
-      );
+      const result = await guardInstance.canActivate(context as unknown as ExecutionContext);
 
       expect(result).toBe(true);
       expect(mockReflector.get).toHaveBeenCalledWith(
         PERMISSIONS_METADATA_KEY,
-        expect.any(Function)
+        expect.any(Function),
       );
     });
 
@@ -78,7 +71,7 @@ describe('PermissionsGuardTest', () => {
       const mockReflector = { get: jest.fn().mockReturnValue([Permission.CREATE]) };
       const guardInstance = new PermissionsGuard(
         mockReflector as unknown as Reflector,
-        usersService
+        usersService,
       );
       const context = createMockContext(undefined);
 
@@ -102,12 +95,12 @@ describe('PermissionsGuardTest', () => {
       const context = createMockContext(user.id);
 
       const mockUserService = {
-        findOne: jest.fn().mockResolvedValue(user)
+        findOne: jest.fn().mockResolvedValue(user),
       };
 
       const guardInstance = new PermissionsGuard(
         mockReflector as unknown as Reflector,
-        mockUserService as unknown as IUsersService
+        mockUserService as unknown as IUsersService,
       );
 
       await expect(
@@ -120,8 +113,8 @@ describe('PermissionsGuardTest', () => {
     });
 
     it('should return true when user has required permissions', async () => {
-      const adminPermissions = ROLES.find(r => r.code === RoleCode.ADMIN)?.permissions || [];
-      const requiredPermission = adminPermissions[0]; 
+      const adminPermissions = ROLES.find((r) => r.code === RoleCode.ADMIN)?.permissions || [];
+      const requiredPermission = adminPermissions[0];
 
       const mockReflector = { get: jest.fn().mockReturnValue([requiredPermission]) };
 
@@ -133,17 +126,15 @@ describe('PermissionsGuardTest', () => {
       const context = createMockContext(user.id);
 
       const mockUserService = {
-        findOne: jest.fn().mockResolvedValue(user)
+        findOne: jest.fn().mockResolvedValue(user),
       };
 
       const guardInstance = new PermissionsGuard(
         mockReflector as unknown as Reflector,
-        mockUserService as unknown as IUsersService
+        mockUserService as unknown as IUsersService,
       );
 
-      const result = await guardInstance.canActivate(
-        context as unknown as ExecutionContext,
-      );
+      const result = await guardInstance.canActivate(context as unknown as ExecutionContext);
 
       expect(result).toBe(true);
     });
@@ -160,18 +151,16 @@ describe('PermissionsGuardTest', () => {
       const context = createMockContext(user.id);
 
       const mockUserService = {
-        findOne: jest.fn().mockResolvedValue(user)
+        findOne: jest.fn().mockResolvedValue(user),
       };
 
       // type cast because of mocks
       const guardInstance = new PermissionsGuard(
         mockReflector as unknown as Reflector,
-        mockUserService as unknown as IUsersService
+        mockUserService as unknown as IUsersService,
       );
 
-      const result = await guardInstance.canActivate(
-        context as unknown as ExecutionContext,
-      );
+      const result = await guardInstance.canActivate(context as unknown as ExecutionContext);
 
       expect(result).toBe(true);
     });
@@ -188,12 +177,12 @@ describe('PermissionsGuardTest', () => {
       const context = createMockContext(user.id);
 
       const mockUserService = {
-        findOne: jest.fn().mockResolvedValue(user)
+        findOne: jest.fn().mockResolvedValue(user),
       };
 
       const guardInstance = new PermissionsGuard(
         mockReflector as unknown as Reflector,
-        mockUserService as unknown as IUsersService
+        mockUserService as unknown as IUsersService,
       );
 
       await expect(
@@ -212,17 +201,15 @@ describe('PermissionsGuardTest', () => {
       const context = createMockContext(user.id);
 
       const mockUserService = {
-        findOne: jest.fn().mockResolvedValue(user)
+        findOne: jest.fn().mockResolvedValue(user),
       };
 
       const guardInstance = new PermissionsGuard(
         mockReflector as unknown as Reflector,
-        mockUserService as unknown as IUsersService
+        mockUserService as unknown as IUsersService,
       );
 
-      const result = await guardInstance.canActivate(
-        context as unknown as ExecutionContext,
-      );
+      const result = await guardInstance.canActivate(context as unknown as ExecutionContext);
 
       expect(result).toBe(true);
     });
@@ -235,12 +222,12 @@ describe('PermissionsGuardTest', () => {
       const mockUserService = {
         findOne: jest.fn().mockImplementation(() => {
           throw new Error(`User with ID ${nonExistentUserId} not found`);
-        })
+        }),
       };
 
       const guardInstance = new PermissionsGuard(
         mockReflector as unknown as Reflector,
-        mockUserService as unknown as IUsersService
+        mockUserService as unknown as IUsersService,
       );
 
       await expect(
@@ -251,10 +238,7 @@ describe('PermissionsGuardTest', () => {
 
   describe('getUserPermissions', () => {
     it('should return empty array for unknown roles', () => {
-      const guardInstance = new PermissionsGuard(
-        {} as Reflector,
-        {} as IUsersService
-      );
+      const guardInstance = new PermissionsGuard({} as Reflector, {} as IUsersService);
 
       const permissions = (guardInstance as any).getUserPermissions(['UNKNOWN_ROLE']);
 
@@ -262,12 +246,9 @@ describe('PermissionsGuardTest', () => {
     });
 
     it('should return permissions for ADMIN role', () => {
-      const guardInstance = new PermissionsGuard(
-        {} as Reflector,
-        {} as IUsersService
-      );
-      const expectedPermissions = ROLES.find(r => r.code === RoleCode.ADMIN)?.permissions || [];
- 
+      const guardInstance = new PermissionsGuard({} as Reflector, {} as IUsersService);
+      const expectedPermissions = ROLES.find((r) => r.code === RoleCode.ADMIN)?.permissions || [];
+
       const permissions = (guardInstance as any).getUserPermissions([RoleCode.ADMIN]);
 
       expect(permissions).toEqual(expectedPermissions);
@@ -278,11 +259,8 @@ describe('PermissionsGuardTest', () => {
     });
 
     it('should return permissions for VIEWER role', () => {
-      const guardInstance = new PermissionsGuard(
-        {} as Reflector,
-        {} as IUsersService
-      );
-      const expectedPermissions = ROLES.find(r => r.code === RoleCode.VIEWER)?.permissions || [];
+      const guardInstance = new PermissionsGuard({} as Reflector, {} as IUsersService);
+      const expectedPermissions = ROLES.find((r) => r.code === RoleCode.VIEWER)?.permissions || [];
 
       const permissions = (guardInstance as any).getUserPermissions([RoleCode.VIEWER]);
 
@@ -294,10 +272,7 @@ describe('PermissionsGuardTest', () => {
     });
 
     it('should return empty array for PERSONAL role', () => {
-      const guardInstance = new PermissionsGuard(
-        {} as Reflector,
-        {} as IUsersService
-      );
+      const guardInstance = new PermissionsGuard({} as Reflector, {} as IUsersService);
 
       const permissions = (guardInstance as any).getUserPermissions([RoleCode.PERSONAL]);
 
@@ -305,55 +280,42 @@ describe('PermissionsGuardTest', () => {
     });
 
     it('should combine permissions from multiple roles', () => {
-      const guardInstance = new PermissionsGuard(
-        {} as Reflector,
-        {} as IUsersService
-      );
-      const adminPermissions = ROLES.find(r => r.code === RoleCode.ADMIN)?.permissions || [];
-      const viewerPermissions = ROLES.find(r => r.code === RoleCode.VIEWER)?.permissions || [];
+      const guardInstance = new PermissionsGuard({} as Reflector, {} as IUsersService);
+      const adminPermissions = ROLES.find((r) => r.code === RoleCode.ADMIN)?.permissions || [];
+      const viewerPermissions = ROLES.find((r) => r.code === RoleCode.VIEWER)?.permissions || [];
 
       const permissions = (guardInstance as any).getUserPermissions([
         RoleCode.ADMIN,
         RoleCode.VIEWER,
       ]);
 
-      expect(permissions).toEqual(expect.arrayContaining([
-        ...adminPermissions,
-        ...viewerPermissions,
-      ]));
+      expect(permissions).toEqual(
+        expect.arrayContaining([...adminPermissions, ...viewerPermissions]),
+      );
     });
 
     it('should handle duplicate permissions from multiple roles', () => {
-      const guardInstance = new PermissionsGuard(
-        {} as Reflector,
-        {} as IUsersService
-      );
-
+      const guardInstance = new PermissionsGuard({} as Reflector, {} as IUsersService);
 
       const permissions = (guardInstance as any).getUserPermissions([
         RoleCode.ADMIN,
         RoleCode.VIEWER,
       ]);
 
-      const viewPermissionCount = permissions.filter(
-        (p: string) => p === Permission.VIEW
-      ).length;
+      const viewPermissionCount = permissions.filter((p: string) => p === Permission.VIEW).length;
 
       expect(viewPermissionCount).toBe(2);
     });
 
     it('should filter out undefined roles', () => {
-      const guardInstance = new PermissionsGuard(
-        {} as Reflector,
-        {} as IUsersService
-      );
+      const guardInstance = new PermissionsGuard({} as Reflector, {} as IUsersService);
 
       const permissions = (guardInstance as any).getUserPermissions([
         RoleCode.ADMIN,
         'UNDEFINED_ROLE' as RoleCode,
       ]);
 
-      const adminPermissions = ROLES.find(r => r.code === RoleCode.ADMIN)?.permissions || [];
+      const adminPermissions = ROLES.find((r) => r.code === RoleCode.ADMIN)?.permissions || [];
       expect(permissions).toEqual(adminPermissions);
     });
   });

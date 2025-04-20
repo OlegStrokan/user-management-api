@@ -1,7 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { ValidationPipe } from './validation.pipe';
 import { ArgumentMetadata, BadRequestException } from '@nestjs/common';
-import { IsString, IsArray, ArrayNotEmpty, IsIn, MinLength, MaxLength, ArrayUnique } from 'class-validator';
+import {
+  IsString,
+  IsArray,
+  ArrayNotEmpty,
+  IsIn,
+  MinLength,
+  MaxLength,
+  ArrayUnique,
+} from 'class-validator';
 import { PREDEFINED_ROLES, PREDEFINED_GROUPS } from '../../shared/types/roles.enum';
 
 // in production code, this would probably be separated into test helpers
@@ -60,22 +68,26 @@ describe('ValidationPipeTest', () => {
 
     it('should throw BadRequestException when name is too short', async () => {
       const invalidData = {
-        name: 'Jo', 
+        name: 'Jo',
         roles: ['ADMIN'],
         groups: ['GROUP_1'],
       };
 
-      await expect(validationPipe.transform(invalidData, metadata)).rejects.toThrow(BadRequestException);
+      await expect(validationPipe.transform(invalidData, metadata)).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
     it('should throw BadRequestException when name is too long', async () => {
       const invalidData = {
-        name: 'a'.repeat(101), 
+        name: 'a'.repeat(101),
         roles: ['ADMIN'],
         groups: ['GROUP_1'],
       };
 
-      await expect(validationPipe.transform(invalidData, metadata)).rejects.toThrow(BadRequestException);
+      await expect(validationPipe.transform(invalidData, metadata)).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
     it('should throw BadRequestException when roles array is empty', async () => {
@@ -85,7 +97,9 @@ describe('ValidationPipeTest', () => {
         groups: ['GROUP_1'],
       };
 
-      await expect(validationPipe.transform(invalidData, metadata)).rejects.toThrow(BadRequestException);
+      await expect(validationPipe.transform(invalidData, metadata)).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
     it('should throw BadRequestException when roles contain invalid value', async () => {
@@ -95,7 +109,9 @@ describe('ValidationPipeTest', () => {
         groups: ['GROUP_1'],
       };
 
-      await expect(validationPipe.transform(invalidData, metadata)).rejects.toThrow(BadRequestException);
+      await expect(validationPipe.transform(invalidData, metadata)).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
     it('should throw BadRequestException when groups array is empty', async () => {
@@ -105,7 +121,9 @@ describe('ValidationPipeTest', () => {
         groups: [],
       };
 
-      await expect(validationPipe.transform(invalidData, metadata)).rejects.toThrow(BadRequestException);
+      await expect(validationPipe.transform(invalidData, metadata)).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
     it('should throw BadRequestException when groups contain invalid value', async () => {
@@ -115,12 +133,14 @@ describe('ValidationPipeTest', () => {
         groups: ['INVALID_GROUP'],
       };
 
-      await expect(validationPipe.transform(invalidData, metadata)).rejects.toThrow(BadRequestException);
+      await expect(validationPipe.transform(invalidData, metadata)).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
     it('should throw BadRequestException with detailed error messages', async () => {
       const invalidData = {
-        name: 'Jo', 
+        name: 'Jo',
         roles: ['INVALID_ROLE'],
         groups: [],
       };
@@ -134,8 +154,8 @@ describe('ValidationPipeTest', () => {
         expect(response.message).toBe('Validation failed');
         expect(response.errors).toBeDefined();
         expect(response.errors.length).toBeGreaterThan(0);
-        
-        const propertyErrors = response.errors.map(err => err.property);
+
+        const propertyErrors = response.errors.map((err) => err.property);
         expect(propertyErrors).toContain('name');
         expect(propertyErrors).toContain('roles');
         expect(propertyErrors).toContain('groups');
@@ -173,7 +193,9 @@ describe('ValidationPipeTest', () => {
         extraProp: 'should be rejected',
       };
 
-      await expect(validationPipe.transform(dataWithExtraProps, metadata)).rejects.toThrow(BadRequestException);
+      await expect(validationPipe.transform(dataWithExtraProps, metadata)).rejects.toThrow(
+        BadRequestException,
+      );
     });
 
     it('should handle duplicate values in arrays', async () => {
@@ -183,7 +205,9 @@ describe('ValidationPipeTest', () => {
         groups: ['GROUP_1'],
       };
 
-      await expect(validationPipe.transform(dataWithDuplicates, metadata)).rejects.toThrow(BadRequestException);
+      await expect(validationPipe.transform(dataWithDuplicates, metadata)).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 });

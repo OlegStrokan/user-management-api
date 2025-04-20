@@ -44,9 +44,7 @@ export class PermissionsGuard implements CanActivate {
     );
 
     if (!hasPermission) {
-      throw new ForbiddenException(
-        'Not allowed to perform action due to insufficient permissions',
-      );
+      throw new ForbiddenException('Not allowed to perform action due to insufficient permissions');
     }
 
     return true;

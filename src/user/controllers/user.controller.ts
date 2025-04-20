@@ -15,12 +15,7 @@ import { Permission } from 'src/shared/types/roles.enum';
 import { CreateUserDto } from './dtos/create-user.dto';
 import { UpdateUserDto } from './dtos/update-user.dto';
 import { UserDto } from './dtos/user.dto';
-import {
-  ApiSecurity,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiSecurity, ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { INJECTION_TOKENS } from 'src/shared/types/injection-tokens.enum';
 import { IUsersService } from '../services/interface';
 
