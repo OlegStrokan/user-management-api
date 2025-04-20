@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:13
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: test_db
+        ports:
+          - 5455:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+        cache: 'yarn'
+
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+
+    - name: Lint
+      run: yarn lint
+
+    - name: Build
+      run: yarn build
+
+    - name: Create test env file
+      run: |
+        cat > .test.env << EOL
+        POSTGRES_HOST=localhost
+        POSTGRES_PORT=5455
+        POSTGRES_USER=postgres
+        POSTGRES_PASSWORD=postgres
+        POSTGRES_DB=test_db
+        DATABASE_URL=postgresql://postgres:postgres@localhost:5455/test_db
+        EOL
+
+    - name: Wait for PostgreSQL
+      run: |
+        echo "Waiting for PostgreSQL to be ready..."
+        # Wait for PostgreSQL to be ready
+        timeout=60
+        while ! nc -z localhost 5455; do
+          if [ $timeout -le 0 ]; then
+            echo "Timed out waiting for PostgreSQL"
+            exit 1
+          fi
+          echo "PostgreSQL is unavailable - sleeping"
+          sleep 1
+          ((timeout--))
+        done
+        echo "PostgreSQL is up!"
+
+    - name: Run database migrations
+      run: yarn migration:test:run
+
+    - name: Test
+      run: yarn test

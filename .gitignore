@@ -1,0 +1,8 @@
+node_modules
+exchange_test
+exchange_prod
+exchange
+dist
+.dev.env
+.test.env
+.local.env

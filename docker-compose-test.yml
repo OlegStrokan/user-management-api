@@ -1,0 +1,11 @@
+services:
+  exchange:
+    image: postgres:13
+    env_file:
+      - .test.env
+    container_name: exchange_test
+    ports:
+      - '5456:5432'
+    volumes:
+      - ./exchange_test:/var/lib/postgresql/data
+    restart: always
