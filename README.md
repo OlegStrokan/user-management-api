@@ -97,8 +97,8 @@ docker compose -p exchange-prod down
 ## Deployment Information
 
 The deployed version of this application is available at:
-- Base URL: `https://nestjs-api-three.vercel.app`
-- Swagger API Documentation: `https://nestjs-api-three.vercel.app/api/docs`
+- Base URL: `https://user-management-api-pi.vercel.app/`
+- Swagger API Documentation: `https://user-management-api-pi.vercel.app/api/docs`
 
 For `.dev.env` variables, please contact: oleg14ua71@gmail.com
 

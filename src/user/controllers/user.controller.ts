@@ -86,7 +86,7 @@ export class UsersController {
 
   @Get('managed/:id')
   @UseGuards(PermissionsGuard)
-  @RequiredPermissions(Permission.VIEW)
+  @RequiredPermissions(Permission.EDIT)
   @ApiOperation({ summary: 'Get users managed by the specified admin' })
   @ApiResponse({
     status: 200,
